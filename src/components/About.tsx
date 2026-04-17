@@ -35,7 +35,7 @@ export default function About() {
 
   return (
     <section id="about" ref={ref} className="relative h-[300vh]">
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden bg-[#F7F6F2]">
         <motion.div
           className="max-w-6xl mx-auto px-6 w-full"
           style={{ opacity: exitOpacity, scale: exitScale }}
@@ -124,7 +124,5 @@ export default function About() {
         </motion.div>
       </div>
     </section>
-  );
-}
   );
 }

@@ -11,7 +11,7 @@ const letterVariants = {
     transition: {
       duration: 0.9,
       delay: 0.04 * i,
-      ease: [0.215, 0.61, 0.355, 1],
+      ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number],
     },
   }),
 };
@@ -51,7 +51,7 @@ export default function Hero() {
 
   return (
     <section ref={ref} className="relative h-[200vh]">
-      <div className="sticky top-0 h-screen flex flex-col justify-end pb-20 pt-32 px-6 max-w-6xl mx-auto overflow-hidden">
+      <div className="sticky top-0 h-screen flex flex-col justify-end pb-20 pt-32 px-6 max-w-6xl mx-auto overflow-hidden bg-[#F7F6F2]">
         <motion.div
           style={{ opacity, scale, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
         >
