@@ -50,8 +50,8 @@ export default function Hero() {
   const blur = useTransform(scrollYProgress, [0.3, 0.7], [0, 10]);
 
   return (
-    <section ref={ref} className="relative h-[200vh]">
-      <div className="sticky top-0 h-screen flex flex-col justify-end pb-20 pt-32 px-6 max-w-6xl mx-auto overflow-hidden bg-[#F7F6F2]">
+    <section id="hero" ref={ref} className="relative h-[200vh]">
+      <div className="sticky top-0 h-screen flex flex-col justify-end pb-20 pt-32 px-6 max-w-6xl mx-auto overflow-hidden">
         <motion.div
           style={{ opacity, scale, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
         >

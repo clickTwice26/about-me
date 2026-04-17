@@ -46,7 +46,7 @@ export default function Stats() {
   const opacity = useTransform(scrollYProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0]);
 
   return (
-    <section ref={ref} className="relative py-8 bg-[#F7F6F2]">
+    <section id="stats" ref={ref} className="relative py-8 bg-[#F7F6F2]">
       <motion.div className="border-y border-[#D8D8D0]" style={{ opacity }}>
         <motion.div
           className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4"

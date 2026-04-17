@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 
 const projects = [
@@ -8,7 +8,7 @@ const projects = [
     number: "01",
     title: "SaaS Dashboard",
     description:
-      "A full-featured analytics dashboard for SaaS founders. Real-time metrics, cohort analysis, and revenue tracking built with Next.js and D3.",
+      "A full-featured analytics dashboard for SaaS founders. Real-time metrics, cohort analysis, and revenue tracking.",
     tags: ["Next.js", "TypeScript", "PostgreSQL", "D3.js"],
     year: "2024",
     href: "#",
@@ -18,7 +18,7 @@ const projects = [
     number: "02",
     title: "AI Content Studio",
     description:
-      "Multi-modal AI content generation platform integrating multiple LLM providers with a unified streaming API and credit management system.",
+      "Multi-modal AI content generation platform integrating multiple LLM providers with a unified streaming API.",
     tags: ["React", "Node.js", "OpenAI", "Stripe"],
     year: "2024",
     href: "#",
@@ -28,18 +28,8 @@ const projects = [
     number: "03",
     title: "Open Commerce",
     description:
-      "Headless e-commerce storefront with edge-cached product pages, optimistic cart updates, and sub-second checkout flows.",
+      "Headless e-commerce storefront with edge-cached product pages, optimistic cart updates, and sub-second checkout.",
     tags: ["Next.js", "Shopify", "Tailwind", "Redis"],
-    year: "2023",
-    href: "#",
-    highlight: false,
-  },
-  {
-    number: "04",
-    title: "Design System",
-    description:
-      "A token-driven component library used across 3 products. Full Storybook documentation, A11y compliant, and tree-shakeable.",
-    tags: ["React", "TypeScript", "Storybook", "Radix UI"],
     year: "2023",
     href: "#",
     highlight: false,
@@ -48,60 +38,43 @@ const projects = [
 
 function ProjectCard({
   project,
-  progress,
   index,
 }: {
   project: (typeof projects)[0];
-  progress: MotionValue<number>;
   index: number;
 }) {
   const [hovered, setHovered] = useState(false);
-  const total = projects.length;
-  const start = index / total;
-  const mid = (index + 0.3) / total;
-  const end = (index + 0.8) / total;
-  const exit = (index + 1) / total;
-
-  const opacity = useTransform(progress, [start, mid, end, exit], [0, 1, 1, index === total - 1 ? 1 : 0.3]);
-  const y = useTransform(progress, [start, mid], [60, 0]);
-  const scale = useTransform(progress, [start, mid, end, exit], [0.95, 1, 1, index === total - 1 ? 1 : 0.97]);
 
   return (
     <motion.a
       href={project.href}
-      className="group relative border-t border-[#D8D8D0] py-8 grid grid-cols-1 md:grid-cols-[60px_1fr_auto] items-start gap-4 md:gap-8 rounded-lg px-4 -mx-4"
-      style={{ opacity, y, scale }}
+      className="group relative border-t border-[#D8D8D0] py-8 md:py-10 grid grid-cols-1 md:grid-cols-[60px_1fr_auto] items-start gap-4 md:gap-8 rounded-lg px-6 -mx-6"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       whileHover={{ x: 8 }}
     >
-      <motion.div
-        className="absolute inset-0 rounded-lg bg-[#0A0A0A] -z-10"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: hovered ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-        style={{ originX: 0 }}
-      />
-
       <motion.span
-        className="text-xs font-mono pt-1"
-        animate={{ color: hovered ? "#888" : "#888" }}
+        className="text-sm font-mono pt-1 text-[#888]"
       >
         {project.number}
       </motion.span>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center gap-3">
           <motion.h3
-            className="text-xl font-bold tracking-tight"
-            animate={{ color: hovered ? "#ffffff" : "#0A0A0A" }}
+            className="text-2xl md:text-3xl font-bold tracking-tight"
+            animate={{ color: hovered ? "#FF5500" : "#0A0A0A" }}
             transition={{ duration: 0.3 }}
           >
             {project.title}
           </motion.h3>
           {project.highlight && (
             <motion.span
-              className="text-[10px] font-semibold uppercase tracking-widest bg-[#FF5500] text-white px-2 py-0.5 rounded-full"
+              className="text-xs font-semibold uppercase tracking-widest bg-[#FF5500] text-white px-3 py-1 rounded-full"
               animate={{
                 boxShadow: hovered
                   ? "0 0 20px rgba(255,85,0,0.4)"
@@ -113,9 +86,7 @@ function ProjectCard({
           )}
         </div>
         <motion.p
-          className="text-sm leading-relaxed max-w-xl"
-          animate={{ color: hovered ? "#aaa" : "#555" }}
-          transition={{ duration: 0.3 }}
+          className="text-base md:text-lg leading-relaxed max-w-2xl text-[#555]"
         >
           {project.description}
         </motion.p>
@@ -123,11 +94,7 @@ function ProjectCard({
           {project.tags.map((tag) => (
             <motion.span
               key={tag}
-              className="text-xs border px-3 py-1 rounded-full"
-              animate={{
-                borderColor: hovered ? "#444" : "#D8D8D0",
-                color: hovered ? "#aaa" : "#555",
-              }}
+              className="text-sm border border-[#D8D8D0] text-[#555] px-4 py-1.5 rounded-full"
             >
               {tag}
             </motion.span>
@@ -136,13 +103,13 @@ function ProjectCard({
       </div>
 
       <div className="flex items-center gap-3 flex-shrink-0 mt-1">
-        <motion.span className="text-xs font-mono" animate={{ color: "#888" }}>
+        <motion.span className="text-sm font-mono" animate={{ color: "#888" }}>
           {project.year}
         </motion.span>
         <motion.span
-          className="w-8 h-8 rounded-full border flex items-center justify-center"
+          className="w-10 h-10 rounded-full border flex items-center justify-center text-lg"
           animate={{
-            borderColor: hovered ? "#ffffff" : "#D8D8D0",
+            borderColor: hovered ? "#FF5500" : "#D8D8D0",
             backgroundColor: hovered ? "#FF5500" : "transparent",
             color: hovered ? "#ffffff" : "#555",
             rotate: hovered ? 45 : 0,
@@ -163,16 +130,13 @@ export default function Work() {
     offset: ["start start", "end end"],
   });
 
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
-  const headerY = useTransform(scrollYProgress, [0, 0.08], [40, 0]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+  const headerY = useTransform(scrollYProgress, [0, 0.15], [40, 0]);
   const lineWidth = useTransform(scrollYProgress, [0, 0.5], ["0%", "100%"]);
-  const projectProgress = useTransform(scrollYProgress, [0.1, 0.95], [0, 1]);
-
-  // Exit
-  const exitOpacity = useTransform(scrollYProgress, [0.9, 1], [1, 0]);
+  const exitOpacity = useTransform(scrollYProgress, [0.85, 1], [1, 0]);
 
   return (
-    <section id="work" ref={ref} className="relative h-[350vh]">
+    <section id="work" ref={ref} className="relative h-[200vh]">
       <div className="sticky top-0 h-screen flex items-center overflow-hidden bg-[#F7F6F2]">
         <motion.div className="max-w-6xl mx-auto px-6 w-full relative" style={{ opacity: exitOpacity }}>
           {/* Accent line */}
@@ -183,7 +147,7 @@ export default function Work() {
 
           {/* Header */}
           <motion.div
-            className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
+            className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8"
             style={{ opacity: headerOpacity, y: headerY }}
           >
             <div>
@@ -209,16 +173,17 @@ export default function Work() {
             </motion.a>
           </motion.div>
 
-          {/* Projects */}
+          {/* Projects — all visible at once */}
           <div className="flex flex-col">
             {projects.map((p, i) => (
               <ProjectCard
                 key={p.number}
                 project={p}
-                progress={projectProgress}
                 index={i}
               />
             ))}
+            {/* Bottom border for last item */}
+            <div className="border-t border-[#D8D8D0]" />
           </div>
         </motion.div>
       </div>
