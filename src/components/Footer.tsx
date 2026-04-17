@@ -21,7 +21,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.5 }}
         >
-          © {year} Your Name — Built with Next.js &amp; Tailwind CSS
+          © {year} Shagato
         </motion.p>
 
         <motion.div

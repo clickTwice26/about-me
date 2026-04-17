@@ -55,26 +55,7 @@ export default function Hero() {
         <motion.div
           style={{ opacity, scale, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
         >
-          {/* Available badge */}
-          <motion.div
-            className="mb-10"
-            style={{ y: y3 }}
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            <motion.span
-              className="inline-flex items-center gap-2 border border-[#D8D8D0] rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#555]"
-              whileHover={{ scale: 1.05, borderColor: "#FF5500" }}
-            >
-              <motion.span
-                className="w-2 h-2 rounded-full bg-green-500"
-                animate={{ scale: [1, 1.5, 1], opacity: [1, 0.6, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-              Available for work
-            </motion.span>
-          </motion.div>
+      
 
           {/* Main headline — each line parallaxes at different speed */}
           <div className="mb-8">

@@ -110,7 +110,7 @@ function ProjectCard({
           className="w-10 h-10 rounded-full border flex items-center justify-center text-lg"
           animate={{
             borderColor: hovered ? "#FF5500" : "#D8D8D0",
-            backgroundColor: hovered ? "#FF5500" : "transparent",
+            backgroundColor: hovered ? "#FF5500" : "rgba(255,85,0,0)",
             color: hovered ? "#ffffff" : "#555",
             rotate: hovered ? 45 : 0,
           }}
