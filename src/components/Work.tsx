@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
 const projects = [
@@ -51,7 +51,7 @@ function ProjectCard({
       className="group relative border-t border-[#D8D8D0] py-8 md:py-10 grid grid-cols-1 md:grid-cols-[60px_1fr_auto] items-start gap-4 md:gap-8 rounded-lg px-6 -mx-6"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: false, amount: 0.3 }}
       transition={{ duration: 0.6, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
@@ -130,61 +130,55 @@ export default function Work() {
     offset: ["start start", "end end"],
   });
 
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-  const headerY = useTransform(scrollYProgress, [0, 0.15], [40, 0]);
-  const lineWidth = useTransform(scrollYProgress, [0, 0.5], ["0%", "100%"]);
-  const exitOpacity = useTransform(scrollYProgress, [0.85, 1], [1, 0]);
+  const inView = useInView(ref, { once: false, amount: 0.5 });
+  const exitOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0]);
 
   return (
     <section id="work" ref={ref} className="relative h-[200vh]">
       <div className="sticky top-0 h-screen flex items-center overflow-hidden bg-[#F7F6F2]">
-        <motion.div className="max-w-6xl mx-auto px-6 w-full relative" style={{ opacity: exitOpacity }}>
-          {/* Accent line */}
-          <motion.div
-            className="absolute -top-4 left-0 right-0 h-[2px] bg-[#FF5500]"
-            style={{ width: lineWidth }}
-          />
+        <motion.div className="w-full relative" style={{ opacity: exitOpacity }}>
 
-          {/* Header */}
+          {/* Vertical heading — absolutely positioned on the far left, outside content flow */}
           <motion.div
-            className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8"
-            style={{ opacity: headerOpacity, y: headerY }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10"
+            initial={{ opacity: 0, x: -20 }}
+            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <div>
-              <p className="text-xs uppercase tracking-widest text-[#FF5500] font-semibold mb-4">
+            <div
+              style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+              className="flex flex-col items-center gap-4"
+            >
+              <p className="text-[10px] uppercase tracking-widest text-[#FF5500] font-semibold whitespace-nowrap">
                 ✦ Selected Work
               </p>
-              <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold tracking-tight leading-tight text-[#0A0A0A]">
+              <h2
+                className="font-bold tracking-tight text-[#0A0A0A] whitespace-nowrap"
+                style={{ fontSize: "clamp(2rem,4vw,3rem)", lineHeight: 1 }}
+              >
                 Things I&apos;ve{" "}
                 <motion.span
                   className="bg-[#FF5500] text-white px-2 rounded inline-block"
-                  whileHover={{ scale: 1.1, rotate: -2 }}
+                  whileHover={{ scale: 1.08 }}
                 >
                   shipped.
                 </motion.span>
               </h2>
             </div>
-            <motion.a
-              href="#"
-              className="text-sm font-medium text-[#555] uppercase tracking-widest flex-shrink-0"
-              whileHover={{ color: "#FF5500", x: 4 }}
-            >
-              All Projects →
-            </motion.a>
           </motion.div>
 
-          {/* Projects — all visible at once */}
-          <div className="flex flex-col">
-            {projects.map((p, i) => (
-              <ProjectCard
-                key={p.number}
-                project={p}
-                index={i}
-              />
-            ))}
-            {/* Bottom border for last item */}
-            <div className="border-t border-[#D8D8D0]" />
+          {/* Projects — stay in normal centered container, unaffected by vertical text */}
+          <div className="max-w-6xl mx-auto px-6">
+            
+
+            <div className="flex flex-col">
+              {projects.map((p, i) => (
+                <ProjectCard key={p.number} project={p} index={i} />
+              ))}
+              <div className="border-t border-[#D8D8D0]" />
+            </div>
           </div>
+
         </motion.div>
       </div>
     </section>

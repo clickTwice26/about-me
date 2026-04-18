@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const socials = [
@@ -16,6 +16,7 @@ export default function Contact() {
     offset: ["start start", "end end"],
   });
 
+  const inView = useInView(ref, { once: false, amount: 0.5 });
   const footerOpacity = useTransform(scrollYProgress, [0.7, 0.88], [0, 1]);
   const footerY = useTransform(scrollYProgress, [0.7, 0.88], [30, 0]);
 
@@ -26,7 +27,12 @@ export default function Contact() {
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden bg-[#F7F6F2]">
 
         {/* Main content */}
-        <div className="max-w-6xl mx-auto px-6 w-full flex-1 flex flex-col justify-center">
+        <motion.div
+          className="max-w-6xl mx-auto px-6 w-full flex-1 flex flex-col justify-center"
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
           <p className="text-xs uppercase tracking-widest text-[#FF5500] font-semibold mb-8">
             ✦ Contact
           </p>
@@ -86,7 +92,7 @@ export default function Contact() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Footer */}
         <motion.footer
@@ -111,9 +117,6 @@ export default function Contact() {
           </div>
         </motion.footer>
       </div>
-    </section>
-  );
-}
     </section>
   );
 }

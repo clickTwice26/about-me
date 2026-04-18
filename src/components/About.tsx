@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
 
 export default function About() {
@@ -10,20 +10,12 @@ export default function About() {
     offset: ["start start", "end end"],
   });
 
-  // Scroll-driven transforms for cinematic reveal
-  const labelOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
-  const labelY = useTransform(scrollYProgress, [0, 0.1], [30, 0]);
+  // Immediately visible when section enters view
+  const inView = useInView(ref, { once: false, amount: 0.5 });
 
-  const headingOpacity = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
-  const headingX = useTransform(scrollYProgress, [0.05, 0.2], [-80, 0]);
-
-  // Right side text loads together with the section entry
-  const bodyOpacity = useTransform(scrollYProgress, [0.08, 0.22], [0, 1]);
-  const bodyY = useTransform(scrollYProgress, [0.08, 0.22], [40, 0]);
-
-  // Exit: everything fades as we scroll past
-  const exitOpacity = useTransform(scrollYProgress, [0.85, 1], [1, 0]);
-  const exitScale = useTransform(scrollYProgress, [0.85, 1], [1, 0.95]);
+  // Exit: fade + shrink as we scroll past
+  const exitOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0]);
+  const exitScale = useTransform(scrollYProgress, [0.8, 1], [1, 0.95]);
 
   return (
     <section id="about" ref={ref} className="relative h-[200vh]">
@@ -35,14 +27,20 @@ export default function About() {
           {/* Label */}
           <motion.p
             className="text-xs uppercase tracking-widest text-[#FF5500] font-semibold mb-8"
-            style={{ opacity: labelOpacity, y: labelY }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             ✦ About Me
           </motion.p>
 
           <div className="grid md:grid-cols-2 gap-16 items-start">
             {/* Heading */}
-            <motion.div style={{ opacity: headingOpacity, x: headingX }}>
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
+              transition={{ duration: 0.7, delay: 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-bold leading-tight tracking-tight text-[#0A0A0A]">
                 I write code the way a{" "}
                 <motion.span
@@ -55,15 +53,17 @@ export default function About() {
               </h2>
             </motion.div>
 
-            {/* Body — loads together with section */}
+            {/* Body */}
             <motion.div
               className="flex flex-col gap-6 text-[#555] leading-relaxed"
-              style={{ opacity: bodyOpacity, y: bodyY }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              transition={{ duration: 0.7, delay: 0.24, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <p>
                 Hi, I&apos;m{" "}
                 <strong className="text-[#0A0A0A]">Shagato Chowdhury</strong> — a
-                full-stack developer based in [Your City]. I specialise in
+                full-stack developer based in Dhaka. I specialise in
                 React, Next.js, and Node.js, building products that feel as good
                 as they perform.
               </p>
@@ -84,10 +84,10 @@ export default function About() {
                 {[
                   <>
                     Currently working at{" "}
-                    <strong className="text-[#0A0A0A]">Company Name</strong>
+                    <strong className="text-[#0A0A0A]">DSAT School</strong>
                   </>,
                   "Open to freelance & consulting",
-                  "Based in [Your City], remote-friendly",
+                  "Based in Dhaka, remote-friendly",
                 ].map((text, i) => (
                   <motion.div
                     key={i}

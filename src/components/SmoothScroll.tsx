@@ -12,9 +12,9 @@ import Lenis from "lenis";
   - Stats (short section) snaps fully — any proximity pulls you in
 */
 
-const SNAP_ZONE = 0.10;        // 10% of section height = magnetic zone
-const IDLE_DELAY = 120;         // ms after last scroll event to trigger snap
-const SNAP_DURATION = 1.0;     // snap animation duration
+const SNAP_ZONE = 0.08;        // 8% of section height = magnetic zone
+const IDLE_DELAY = 180;         // ms after last scroll event to trigger snap
+const SNAP_DURATION = 1.1;     // snap animation duration
 const MIN_SNAP_DISTANCE = 8;   // px — don't snap if already close enough
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
@@ -93,9 +93,9 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.6,
+      duration: 1.9,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.4,
     });
 
     lenisRef.current = lenis;

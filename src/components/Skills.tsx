@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useEffect, useCallback, useState } from "react";
 import {
   SiTypescript,
@@ -51,7 +51,7 @@ function MarqueeRow() {
   const updateSpotlight = useCallback(() => {
     if (!trackRef.current) return;
     const centerX = window.innerWidth / 2;
-    const spotlightRadius = window.innerWidth * 0.15; // 15% of viewport = spotlight zone
+    const spotlightRadius = window.innerWidth * 0.05; // 5% of viewport = tight single-icon spotlight
     const newScales: number[] = [];
 
     itemRefs.current.forEach((el) => {
@@ -79,9 +79,9 @@ function MarqueeRow() {
   }, [updateSpotlight]);
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-x-clip overflow-y-visible py-16">
       {/* Spotlight glow indicator */}
-      <div className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 w-[30vw] bg-gradient-to-r from-transparent via-[#FF550008] to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 w-[12vw] bg-gradient-to-r from-transparent via-[#FF550010] to-transparent z-10" />
 
       <motion.div
         ref={trackRef}
@@ -91,7 +91,7 @@ function MarqueeRow() {
       >
         {doubled.map((skill, i) => {
           const intensity = scales[i] || 0;
-          const s = 1 + intensity * 0.6; // scale: 1 → 1.6
+          const s = 1 + intensity * 1.2; // scale: 1 → 2.2
           const Icon = skill.icon;
 
           return (
@@ -140,9 +140,8 @@ export default function Skills() {
     offset: ["start start", "end end"],
   });
 
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-  const headingY = useTransform(scrollYProgress, [0, 0.2], [40, 0]);
-  const exitOpacity = useTransform(scrollYProgress, [0.85, 1], [1, 0]);
+  const inView = useInView(ref, { once: false, amount: 0.5 });
+  const exitOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0]);
 
   return (
     <section id="skills" ref={ref} className="relative h-[180vh]">
@@ -151,7 +150,9 @@ export default function Skills() {
           {/* Header */}
           <motion.div
             className="text-center mb-20 px-6"
-            style={{ opacity: headingOpacity, y: headingY }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             <p className="text-xs uppercase tracking-widest text-[#FF5500] font-semibold mb-4">
               ✦ Stack
